@@ -1,43 +1,52 @@
-import {Component} from "react"
-import CovidItem from "../CovidItem"
+import React, { useState, useEffect } from 'react';
 
-class CovidList extends Component{
-    state = {covidData: []}
+const CovidList = () => {
+  const [covidData, setCovidData] = useState(null);
+  const [loading, setLoading] = useState(true);
 
-    componentDidMount(){
-        this.getCovidData()
-    }
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetch('https://covid-india2.p.rapidapi.com/states', {
+          method: 'GET',
+          headers: {
+            'x-rapidapi-host': 'covid-india2.p.rapidapi.com',
+            'x-rapidapi-key': '12f2e63d7bmshb2dbdd4c7619415p1dd412jsnb9b85eeef10c',
+          },
+        });
 
-    getCovidData = async () =>{
-        const response = await fetch("https://covid-india2.p.rapidapi.com/states")
-        const data = await response.json()
-        const updatedData= data.map(eachItem=>({
-          id: eachItem.id,
-          activeToday: eachItem.active_today,
-          deathToday: eachItem.active_today,
-          recoveredToday: eachItem.recovered_today,
-          active: eachItem.active,
-          death: eachItem.death,
-          recovered: eachItem.recovered,
-          positive: eachItem.positive,
-          positiveToday: eachItem.positive_today,
-          stateName: eachItem.state_name,
-          stateCode: eachItem.state_code,
-          stateAbbr: eachItem.state_abbr,
-          date: eachItem.date
-        }))
-        this.setState({covidData: updatedData})
-    }
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
 
-    render(){
-      const {covidData} = this.state
-        return(
-            <div className="covid-container">
-                {covidData.map(item =>(
-                    <CovidItem covidData={item} key={item.id}/>
-                ))}
-            </div>
-        )
-    }
-}
-export default CovidList
+        const data = await response.json();
+        setCovidData(data);
+        setLoading(false); 
+      } catch (error) {
+        console.error('Error fetching data:', error);
+        setLoading(false); 
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  return (
+    <div>
+      <h1>COVID-19 Data by State</h1>
+      {loading ? (
+        <p>Loading...</p>
+      ) : (
+        <ul>
+          {covidData && covidData.map((stateData) => (
+            <li key={stateData.stateName}>
+              {stateData.stateName}
+            </li>
+          ))}
+        </ul>
+      )}
+    </div>
+  );
+};
+
+export default CovidList;
