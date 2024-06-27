@@ -7,10 +7,10 @@ const CovidList = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch('https://covid-india2.p.rapidapi.com/states', {
+        const response = await fetch('https://corona-virus-world-and-india-data.p.rapidapi.com/api', {
           method: 'GET',
           headers: {
-            'x-rapidapi-host': 'covid-india2.p.rapidapi.com',
+            'x-rapidapi-host': 'corona-virus-world-and-india-data.p.rapidapi.com',
             'x-rapidapi-key': '12f2e63d7bmshb2dbdd4c7619415p1dd412jsnb9b85eeef10c',
           },
         });
