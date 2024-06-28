@@ -1,16 +1,16 @@
 import React, { useState, useEffect } from 'react';
 
 const CovidList = () => {
-  const [covidData, setCovidData] = useState(null);
+  const [userData, setUserData] = useState(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch('https://corona-virus-world-and-india-data.p.rapidapi.com/api', {
+        const response = await fetch('https://ai-random-user-generator.p.rapidapi.com/random-user?results=7&gender=female&nation=en_US', {
           method: 'GET',
           headers: {
-            'x-rapidapi-host': 'corona-virus-world-and-india-data.p.rapidapi.com',
+            'x-rapidapi-host': 'ai-random-user-generator.p.rapidapi.com',
             'x-rapidapi-key': '12f2e63d7bmshb2dbdd4c7619415p1dd412jsnb9b85eeef10c',
           },
         });
@@ -20,10 +20,10 @@ const CovidList = () => {
         }
 
         const data = await response.json();
-        setCovidData(data);
+        setUserData(data);
         setLoading(false); 
       } catch (error) {
-        console.error('Error fetching data:', error);
+        console.log('Error fetching data:', error);
         setLoading(false); 
       }
     };
@@ -33,14 +33,14 @@ const CovidList = () => {
 
   return (
     <div>
-      <h1>COVID-19 Data by State</h1>
+      <h1>AI Random User Generator</h1>
       {loading ? (
         <p>Loading...</p>
       ) : (
         <ul>
-          {covidData && covidData.map((stateData) => (
-            <li key={stateData.stateName}>
-              {stateData.stateName}
+          {userData && userData.map((user) => (
+            <li key={user.name}>
+              {user.name}
             </li>
           ))}
         </ul>
@@ -50,3 +50,4 @@ const CovidList = () => {
 };
 
 export default CovidList;
+
