@@ -20,7 +20,7 @@ const CovidList = () => {
         }
 
         const data = await response.json();
-        setUserData(data);
+        setUserData(data.results);
         setLoading(false); 
       } catch (error) {
         console.log('Error fetching data:', error);
